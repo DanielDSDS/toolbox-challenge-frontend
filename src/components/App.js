@@ -3,7 +3,6 @@ import { Table } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 
-
 const App = () => {
   const [files, setFiles] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -13,6 +12,10 @@ const App = () => {
     getAllFiles()
   }, [])
 
+  /**
+ * @description Get all available files and their information 
+ * @returns {Array} Rreturns all files information 
+ */
   const getAllFiles = async () => {
     setErrorMessage('');
     const response = await fetch('http://localhost:5000/files/data')
@@ -23,8 +26,14 @@ const App = () => {
     }
   }
 
+  /**
+ * @description Get specific file and its information based on file name 
+ * @param fileName Name of the file to be searched 
+ * @returns {Array} Returns all the information from the specified file 
+ */
   const searchForSingleFile = async (fileName = '') => {
     setErrorMessage('');
+    //If no name has been specified then the search is invalidated
     if (fileName.length) {
       const response = await fetch(`http://localhost:5000/files/data?fileName=${fileName}`)
       if (response.status !== 200) {
@@ -59,11 +68,14 @@ const App = () => {
         </Button>
       </div>
       {
+        // If there is an error message, display it 
         errorMessage
           ? <h5 className='text-center text-danger'>{errorMessage}</h5>
           : null
       }
+
       {
+        // As long as there is an error message or the table is empty then it wont show the table
         files.length && !errorMessage
           ? <Table variant='dark' striped bordered hover >
             <thead>
